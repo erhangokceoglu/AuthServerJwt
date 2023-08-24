@@ -6,13 +6,12 @@ using AuthServer.Core.UnitOfWork;
 using AuthServer.Data;
 using AuthServer.Data.Repositories;
 using AuthServer.Service.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Options;
 using SharedLibrary.Extensions;
-using FluentValidation.AspNetCore;
-using AuthServer.Api.Validators;
+using SharedLibrary.Options;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +41,7 @@ builder.Services.AddCustomTokenAuth(tokenOption!);
 #pragma warning disable CS0618 // Type or member is obsolete
 builder.Services.AddControllers().AddFluentValidation(options =>
 {
-    options.RegisterValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
+    options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,5 +1,8 @@
 using SharedLibrary.Options;
 using SharedLibrary.Extensions;
+using MiniApp1.Api.ClaimsRequirements;
+using Microsoft.AspNetCore.Authorization;
+using static MiniApp1.Api.ClaimsRequirements.BirthDateRequirement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +15,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<IAuthorizationHandler, BirthDateRequirementHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AnkaraPolicy", policy =>
+    {
+        policy.RequireClaim("City", "ankara");
+    });
+    options.AddPolicy("AgePolicy", policy =>
+    {
+        policy.Requirements.Add(new BirthDateRequirement(18));
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

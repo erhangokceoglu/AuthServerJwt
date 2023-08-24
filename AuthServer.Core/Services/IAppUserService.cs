@@ -12,5 +12,6 @@ namespace AuthServer.Core.Services
     {
         Task<Response<AppUserDto>> CreateUserAsync(CreateUserDto createUserDto);
         Task<Response<AppUserDto>> GetUserByNamesAsync(string userName);
+        Task<Response<NoDataDto>> CreateUserRolesAsync(string userName);
     }
 }
